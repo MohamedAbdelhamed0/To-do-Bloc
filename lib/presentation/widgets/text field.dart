@@ -17,6 +17,7 @@ Widget Textfieldup({
       fontSize: 20,
       color: Colors.white,
     ),
+    cursorColor: textcolor,
     decoration: InputDecoration(
       filled: true,
       fillColor: primaypcolor,

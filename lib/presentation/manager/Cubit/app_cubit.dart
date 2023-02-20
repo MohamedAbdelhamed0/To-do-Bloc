@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:sqflite/sqflite.dart';
-
+import 'package:image_picker/image_picker.dart';
 import '../../pages/archived_task_pac/archived_task.dart';
 import '../../pages/done_task_pac/don_task.dart';
 import '../../pages/new_task_pac/new_tasks.dart';
@@ -36,6 +36,15 @@ class AppCubit extends Cubit<AppState> {
     emit(changescreen());
   }
 
+  Future<String?> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return pickedFile.path;
+    }
+    return null;
+  }
+
   //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
   //create data base
   late Database database;
@@ -56,7 +65,7 @@ class AppCubit extends Cubit<AppState> {
         //crate data base table
         database
             .execute(
-          'CREATE TABLE tasks (id INTEGER PRIMARY KEY,title TEXT ,date TEXT ,time TEXT,status TEXT)',
+          'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT, image_path TEXT)',
         )
             .then((value) {
           print('Table Created');
@@ -80,11 +89,16 @@ class AppCubit extends Cubit<AppState> {
       {required String title,
       required String date,
       required String time}) async {
+    final imagePath = await _pickImage();
+    if (imagePath == null) {
+      return;
+    }
+
     return await database!.transaction(
       (txn) {
         return txn
             .rawInsert(
-          'INSERT INTO tasks(title,date,time,status) VALUES("$title","$date","$time","new")',
+          'INSERT INTO tasks(title,date,time,status,image_path) VALUES("$title","$date","$time","new","$imagePath")',
           //[title, date, time, status],
         )
             .then((value) {
@@ -106,12 +120,20 @@ class AppCubit extends Cubit<AppState> {
     emit(getDatabaseLoadingState());
     database!.rawQuery('SELECT*FROM tasks').then((value) {
       value.forEach((element) {
+        final Map<String, dynamic> map = {
+          'id': element['id'],
+          'title': element['title'],
+          'date': element['date'],
+          'time': element['time'],
+          'status': element['status'],
+          'image_path': element['image_path']
+        };
         if (element['status'] == 'new') {
-          newTasks.add(element);
-        } else if (element['status'] == 'done') {
-          Donetasks.add(element);
+          newTasks.add(map);
+        } else if (map['status'] == 'done') {
+          Donetasks.add(map);
         } else {
-          Archivedtasks.add(element);
+          Archivedtasks.add(map);
         }
       });
 

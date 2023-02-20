@@ -43,6 +43,7 @@ dependencies:
   bloc: ^8.1.0
   google_fonts: ^3.0.1
   fluttericon: ^2.0.0
+  image_picker: ^0.8.6+2
 
 
 dev_dependencies:
@@ -83,10 +84,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+     - family: CoveredByYourGrace
+       fonts:
+         - asset:  assets/fonts/CoveredByYourGrace-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
@@ -97,3 +98,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  assets:
+    - assets/fonts/CoveredByYourGrace-Regular.ttf
+#   fonts:
+#    - family: CoveredByYourGrace
+#      fonts:
+#        - assets/fonts/CoveredByYourGrace-Regular.ttf

@@ -7,5 +7,11 @@ Color textcolor = Color(0xfff2b101);
 // Color(0xff84faec)
 Color test = Color(0xfff73a1c);
 
-TextStyle mystyle = GoogleFonts.getFont('Covered By Your Grace',
+TextStyle mystylee = GoogleFonts.getFont('Covered By Your Grace',
     fontSize: 40, color: textcolor, fontWeight: FontWeight.w600);
+
+TextStyle mystyle = TextStyle(
+    fontSize: 40,
+    color: textcolor,
+    fontWeight: FontWeight.w600,
+    fontFamily: 'CoveredByYourGrace');
